@@ -195,6 +195,7 @@
       <button class="tab-btn" data-tab="discord">Discord</button>
       <button class="tab-btn" data-tab="hrp">HRP</button>
       <button class="tab-btn" data-tab="interdictions">Interdictions</button>
+      <button class="tab-btn" data-tab="legal">Légal</button>
       <button class="tab-btn" data-tab="illegal">Illégal</button>
       <button class="tab-btn" data-tab="notions">Notions RP</button>
     </nav>
@@ -230,14 +231,20 @@
       <span class="desc">Fair-play, coma, bannissements</span>
       <span class="arrow">→</span>
     </div>
-    <div class="index-row" data-tab="illegal">
+    <div class="index-row" data-tab="legal">
       <span class="num">04</span>
+      <span class="title">Légal</span>
+      <span class="desc">Entreprises, patrons, annonces</span>
+      <span class="arrow">→</span>
+    </div>
+    <div class="index-row" data-tab="illegal">
+      <span class="num">05</span>
       <span class="title">Illégal</span>
       <span class="desc">Groupes, braquages, drogues, corruption</span>
       <span class="arrow">→</span>
     </div>
     <div class="index-row" data-tab="notions">
-      <span class="num">05</span>
+      <span class="num">06</span>
       <span class="title">Notions RP</span>
       <span class="desc">Lexique du roleplay</span>
       <span class="arrow">→</span>
@@ -306,7 +313,6 @@
         <li>Crosshairs externes (viseurs superposés)</li>
         <li>Kill effects (effets de mort)</li>
         <li>Tracers (marqueurs de tir)</li>
-        <li>Blood effects (effets de sang)</li>
         <li>Hit effects (effets de coups portés)</li>
         <li>Modification de la FOV (champ de vision)</li>
         <li>Fichiers avantageux, tels que la stamina illimitée</li>
@@ -337,11 +343,11 @@
     <div class="split">
       <div class="block">
         <div class="block-head"><span class="roman">III.</span><h3>Streameurs</h3></div>
-        <p class="lead">Le stream est autorisé, sous réserve de ces interdictions :</p>
+        <p class="lead">Le stream est autorisé sous déclaration via ticket discord, sous réserve de ces interdictions :</p>
         <ul class="list">
           <li>Trashtalk</li>
           <li>Récupérer des informations HRP via son propre chat</li>
-          <li>Diffuser un interrogatoire (coupez son et vidéo dès l'intervention d'un modérateur)</li>
+          <li>Diffuser une convocation/BDA (coupez son et vidéo dès l'intervention d'un modérateur)</li>
           <li>Dénigrer le serveur et/ou ses membres</li>
         </ul>
       </div>
@@ -432,6 +438,95 @@
 
   </div>
   <footer>Sunset FA — Interdictions</footer>
+</section>
+
+<!-- LEGAL -->
+<section class="panel" data-panel="legal">
+  <div class="wrap page-head">
+    <span class="kicker">04 — Entreprises</span>
+    <h2>Légal</h2>
+    <p>Les règles applicables aux entreprises officielles du serveur : gestion, patronat, communication et vie interne.</p>
+  </div>
+  <div class="wrap content">
+
+    <div class="block">
+      <div class="block-head"><span class="roman">I.</span><h3>Règlement patron</h3></div>
+      <ul class="list">
+        <li>Vous ne pouvez pas occuper un poste de direction (patron et co-patron) dans deux entreprises en même temps, que ce soit avec un seul personnage ou avec vos autres personnages.</li>
+        <li>L'argent de l'entreprise ne vous appartient pas. Toute dépense doit être justifiée comme liée à l'activité de l'entreprise — il est strictement interdit d'utiliser ses fonds à des fins personnelles.</li>
+        <li>Il est interdit de blanchir plus de 100 000$ par semaine, que ce soit pour votre propre compte ou au profit de groupes illégaux.</li>
+        <li>Toute entreprise souhaitant mettre en place un processus de blanchiment doit impérativement prévenir les référents via leur salon avant de commencer, et attendre leur accord pour débuter.</li>
+        <li>Vous devez respecter le Code des taxes, du travail et des entreprises mis en place par le gouvernement en RP.</li>
+        <li>Céder votre entreprise nécessite d'en informer le gouvernement en RP ainsi que les référents entreprises, et d'effectuer les démarches nécessaires avant la cession.</li>
+        <li>Il est interdit de vendre des véhicules d'entreprise à des particuliers — seule la revente au concessionnaire concerné est autorisée.</li>
+        <li>Les patrons et co-patrons ne sont pas autorisés à vendre leurs biens personnels à leur propre entreprise.</li>
+        <li>Il est interdit pour un patron ou co-patron d'avoir un personnage secondaire dans un groupe officiel. Il reste possible, avec le personnage propriétaire de l'entreprise, de rejoindre un groupe officiel — sauf pour les entreprises historiquement légales (agence immobilière, presse, casino, cabinet comptable).</li>
+        <li>Les entreprises sont limitées à un maximum de 80 employés, direction comprise.</li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="roman">II.</span><h3>Discord à des fins RP</h3></div>
+      <p class="lead">L'utilisation du Discord à des fins RP est interdite, à l'exception des cas suivants :</p>
+      <ul class="list">
+        <li>Réception des candidatures</li>
+        <li>Activités gouvernementales (impôts, reprise ou création d'entreprise, rendez-vous spécifiques), avec la présence d'une secrétaire en RP</li>
+        <li>Affichage de votre règlement, carte ou catalogue</li>
+        <li>Annonces et discussions internes entre employés</li>
+        <li>SAMC</li>
+        <li>Tout le reste doit être effectué en RP (commandes, rendez-vous, etc.)</li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="roman">III.</span><h3>Copinage</h3></div>
+      <p class="lead">Le copinage est strictement interdit dans toute entreprise. Pour rappel, il constitue :</p>
+      <ul class="list">
+        <li>Un favoritisme injustifié lors des recrutements, promotions ou attributions de primes.</li>
+        <li>Le non-respect des procédures habituelles pour avantager des proches ou des connaissances.</li>
+        <li>Une indulgence disproportionnée face au non-respect des règles ou des consignes par certains employés.</li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="roman">IV.</span><h3>Annonces</h3></div>
+      <div class="two-col">
+        <div>
+          <p class="lead" style="margin-bottom:8px;"><strong>Annonces HRP (Discord)</strong></p>
+          <ul class="list">
+            <li>Fréquence : exceptionnelle uniquement.</li>
+            <li>Usage autorisé : réservé aux communications majeures (recrutements, événements spéciaux).</li>
+          </ul>
+        </div>
+        <div>
+          <p class="lead" style="margin-bottom:8px;"><strong>Annonces RP</strong></p>
+          <ul class="list">
+            <li>Cooldown : 30 minutes minimum entre deux annonces.</li>
+            <li>Quota hebdomadaire : 30 annonces maximum par semaine.</li>
+            <li>Usage autorisé : promotions, recrutements, événements.</li>
+            <li>Usage interdit : annoncer uniquement l'ouverture ou la fermeture d'une entreprise.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="roman">V.</span><h3>Règlement général</h3></div>
+      <ul class="list">
+        <li>Les entreprises officielles sont le reflet de l'image du serveur. Les PDG et leurs employés doivent adopter un comportement exemplaire sur leur lieu de travail.</li>
+        <li>Il est interdit d'avoir plusieurs de vos personnages, ou un seul personnage, au sein d'une même entreprise ou dans des entreprises d'un même secteur — ex : si votre P1 travaille à l'Auto Exotic, votre P2 ne peut pas travailler au Benny's. Exception : les entreprises de production, sauf poste à responsabilité ou de gestion (la règle s'applique alors).</li>
+        <li>Il est interdit de réembaucher une personne ayant subi un wipe (volontaire ou consécutif à une Mort RP) dans la même entreprise avec son nouveau personnage. La réintégration n'est possible qu'après la création d'au moins un personnage intermédiaire (l'achat d'un slot ne compte pas comme tel), et un délai total de 2 mois doit être respecté entre le départ et le retour avec un nouveau personnage.</li>
+        <li>Lorsqu'un personnage (le vôtre ou celui d'un co-gérant, haut gradé, etc.) est wipé ou remplacé, il est strictement interdit de réintégrer l'entreprise au même grade que précédemment — vous devez repartir du grade le plus bas.</li>
+        <li>Il est interdit de prendre son service uniquement pour effectuer une vente, une réparation ou une activité ponctuelle, puis de le couper immédiatement après.</li>
+        <li>Les licenciements doivent rester RP et être justifiés par des raisons RP. Si la raison est HRP, elle doit être validée au préalable par les référents entreprises.</li>
+        <li>Les images générées par IA sont interdites pour toutes les entreprises, tous secteurs confondus (logos, affiches, etc.).</li>
+        <li>Il est interdit de voler plus de 200 items par personne et par semaine directement dans les coffres d'entreprises.</li>
+        <li>Il est strictement interdit d'interagir avec un véhicule d'entreprise autre que celui que vous utilisez (déverrouiller, verrouiller, bâcher, etc.) — tout vol dans ou sur un véhicule d'entreprise est fermement interdit.</li>
+      </ul>
+    </div>
+
+  </div>
+  <footer>Sunset FA — Légal</footer>
 </section>
 
 <!-- ILLEGAL -->
