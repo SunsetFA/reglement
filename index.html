@@ -145,6 +145,18 @@
   .toc-pill span{ font-family:"Cormorant Garamond", serif; font-style:italic; color:var(--gold); font-size:13px; }
   .toc-pill:hover{ border-color:var(--line-strong); color:var(--text); }
 
+  .subtabs{ display:flex; gap:10px; padding:26px 0 0; }
+  .subtab{
+    background:none; cursor:pointer; border:1px solid var(--line); color:var(--muted);
+    font-family:"Inter", sans-serif; font-size:13.5px; font-weight:600; padding:10px 18px;
+    border-radius:999px; transition:border-color .2s ease, color .2s ease, background .2s ease;
+  }
+  .subtab:hover{ color:var(--text); border-color:var(--line-strong); }
+  .subtab.active{ color:var(--gold-soft); border-color:var(--line-strong); background:rgba(232,114,12,0.1); }
+
+  .subview{ display:none; }
+  .subview.active{ display:block; }
+
   .content{ padding:54px 0 100px; }
 
   .block{ padding:38px 0; border-bottom:1px solid var(--line); }
@@ -529,25 +541,30 @@
     <h2>Services publics</h2>
     <p>Le fonctionnement des deux grandes factions du serveur : le SASP (Police) et la SAMC (secours médicaux).</p>
   </div>
+
+  <div class="wrap subtabs">
+    <button class="subtab active" data-sub="sasp">🚓 SASP — Police</button>
+    <button class="subtab" data-sub="samc">🚑 SAMC — Secours</button>
+  </div>
     <div class="wrap toc">
-        <button class="toc-pill" onclick="jump('public-b1')"><span>I.</span>Présentation &amp; intégration</button>
-        <button class="toc-pill" onclick="jump('public-b2')"><span>II.</span>Cohérence &amp; responsabilité RP</button>
-        <button class="toc-pill" onclick="jump('public-b3')"><span>III.</span>Action &amp; conséquences RP</button>
-        <button class="toc-pill" onclick="jump('public-b4')"><span>IV.</span>Interdictions générales</button>
-        <button class="toc-pill" onclick="jump('public-b5')"><span>V.</span>Fear RP &amp; fair-play</button>
-        <button class="toc-pill" onclick="jump('public-b6')"><span>VI.</span>Comportement, vie civile &amp; relations avec l'illégal</button>
-        <button class="toc-pill" onclick="jump('public-b7')"><span>VII.</span>Refus &amp; diversité des scènes</button>
-        <button class="toc-pill" onclick="jump('public-b8')"><span>VIII.</span>Projet Ripou</button>
-        <button class="toc-pill" onclick="jump('public-b9')"><span>IX.</span>Divisions &amp; prison</button>
-        <button class="toc-pill" onclick="jump('public-b10')"><span>X.</span>Présentation &amp; nous rejoindre</button>
-        <button class="toc-pill" onclick="jump('public-b11')"><span>XI.</span>Règlement HRP EMS</button>
-        <button class="toc-pill" onclick="jump('public-b12')"><span>XII.</span>EMS illégaux</button>
-        <button class="toc-pill" onclick="jump('public-b13')"><span>XIII.</span>Règlement interne &amp; MortRP</button>
+        <button class="toc-pill" onclick="jump('public-b1')" data-sub="sasp"><span>I.</span>Présentation &amp; intégration</button>
+        <button class="toc-pill" onclick="jump('public-b2')" data-sub="sasp"><span>II.</span>Cohérence &amp; responsabilité RP</button>
+        <button class="toc-pill" onclick="jump('public-b3')" data-sub="sasp"><span>III.</span>Action &amp; conséquences RP</button>
+        <button class="toc-pill" onclick="jump('public-b4')" data-sub="sasp"><span>IV.</span>Interdictions générales</button>
+        <button class="toc-pill" onclick="jump('public-b5')" data-sub="sasp"><span>V.</span>Fear RP &amp; fair-play</button>
+        <button class="toc-pill" onclick="jump('public-b6')" data-sub="sasp"><span>VI.</span>Comportement, vie civile &amp; relations avec l'illégal</button>
+        <button class="toc-pill" onclick="jump('public-b7')" data-sub="sasp"><span>VII.</span>Refus &amp; diversité des scènes</button>
+        <button class="toc-pill" onclick="jump('public-b8')" data-sub="sasp"><span>VIII.</span>Projet Ripou</button>
+        <button class="toc-pill" onclick="jump('public-b9')" data-sub="sasp"><span>IX.</span>Divisions &amp; prison</button>
+        <button class="toc-pill" onclick="jump('public-b10')" data-sub="samc"><span>X.</span>Présentation &amp; nous rejoindre</button>
+        <button class="toc-pill" onclick="jump('public-b11')" data-sub="samc"><span>XI.</span>Règlement HRP EMS</button>
+        <button class="toc-pill" onclick="jump('public-b12')" data-sub="samc"><span>XII.</span>EMS illégaux</button>
+        <button class="toc-pill" onclick="jump('public-b13')" data-sub="samc"><span>XIII.</span>Règlement interne &amp; MortRP</button>
   </div>
 
 <div class="wrap content">
 
-    <div class="divider-label" style="margin:0 0 30px;">SASP — Police</div>
+    <div class="subview active" data-subview="sasp">
 
     <div class="block" id="public-b1">
       <div class="block-head"><span class="roman">I.</span><h3>Présentation &amp; intégration</h3></div>
@@ -640,7 +657,9 @@
       <p class="lead"><strong>Prison</strong> — environnement IC dont la sécurité est sous la responsabilité du SASP, avec des rondes régulières permettant aux détenus de vivre des scènes avec les surveillants. Chaque détenu reste considéré comme un criminel dans un établissement strict : le respect du cadre carcéral est essentiel. Les rencontres IC entre groupes rivaux en prison peuvent avoir lieu (violences, blessures, rendus IC) dans un cadre cohérent et validé par le roleplay ; des scénarios exceptionnels comme une évasion peuvent également être adaptés.</p>
     </div>
 
-    <div class="divider-label" style="margin:56px 0 30px;">SAMC — Secours médicaux</div>
+    </div>
+
+    <div class="subview" data-subview="samc">
 
     <div class="block" id="public-b10">
       <div class="block-head"><span class="roman">X.</span><h3>Présentation &amp; nous rejoindre</h3></div>
@@ -688,6 +707,8 @@
         <strong>Indicateur visuel</strong>
         Lors de l'utilisation du stéthoscope sur un personnage, une petite tête de mort apparaît en bas à droite de l'écran. Si l'icône est cachée, le personnage est considéré comme mort et les actions appropriées peuvent être prises. Si les indications RP du joueur (ex. commande /me) suggèrent qu'il souhaite mourir mais que l'icône n'est pas cachée, le personnage doit être maintenu en coma artificiel et l'information transmise immédiatement au staff avec l'identifiant du personnage.
       </div>
+    </div>
+
     </div>
 
   </div>
@@ -1378,6 +1399,22 @@
     var el = document.getElementById(id);
     if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
   }
+
+  var subtabs = document.querySelectorAll('.subtab');
+  var subviews = document.querySelectorAll('.subview');
+  var subPills = document.querySelectorAll('.toc-pill[data-sub]');
+
+  function goSub(sub){
+    subtabs.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-sub') === sub); });
+    subviews.forEach(function(v){ v.classList.toggle('active', v.getAttribute('data-subview') === sub); });
+    subPills.forEach(function(p){ p.style.display = (p.getAttribute('data-sub') === sub) ? '' : 'none'; });
+  }
+
+  subtabs.forEach(function(btn){
+    btn.addEventListener('click', function(){ goSub(btn.getAttribute('data-sub')); });
+  });
+
+  if (subtabs.length) goSub('sasp');
 </script>
 
 </body>
