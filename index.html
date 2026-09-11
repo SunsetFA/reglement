@@ -63,6 +63,23 @@
 
   .menu-toggle{ display:none; background:none; border:1px solid var(--line-strong); color:var(--text); width:38px; height:38px; border-radius:8px; cursor:pointer; }
 
+  .tab-group{ position:relative; }
+  .group-trigger{ display:inline-flex; align-items:center; gap:4px; }
+  .group-trigger .caret{ font-size:10px; transition:transform .2s ease; color:var(--muted-dim); }
+  .group-trigger.active-group .caret{ color:var(--gold); }
+  .tab-group.open .group-trigger .caret{ transform:rotate(180deg); }
+  .dropdown{
+    display:none; position:absolute; top:calc(100% + 8px); left:0; min-width:190px; z-index:50;
+    background:var(--bg-elevated); border:1px solid var(--line); border-radius:10px; padding:6px; flex-direction:column; gap:1px;
+  }
+  .tab-group.open .dropdown{ display:flex; }
+  .dropdown-item{
+    text-align:left; background:none; border:none; color:var(--muted); font-family:"Inter", sans-serif;
+    font-size:13px; padding:9px 12px; border-radius:6px; cursor:pointer; transition:color .2s ease, background .2s ease;
+  }
+  .dropdown-item:hover{ color:var(--text); background:rgba(232,114,12,0.08); }
+  .dropdown-item.active{ color:var(--gold-soft); background:rgba(232,114,12,0.1); }
+
   /* PANELS */
   .panel{ display:none; min-height:calc(100vh - 66px); animation:fade .4s ease; }
   .panel.active{ display:block; }
@@ -107,11 +124,26 @@
   .index-row:hover .arrow{ transform:translateX(4px); }
   @media(min-width:640px){ .index-row .desc{ display:block; } }
 
+  .index-group-label{
+    font-size:11.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold);
+    margin:40px 0 4px; font-weight:600;
+  }
+  .index-group-label:first-child{ margin-top:0; }
+
   /* CONTENT PAGES */
   .page-head{ padding:70px 0 46px; border-bottom:1px solid var(--line); }
   .page-head .kicker{ margin-bottom:16px; }
   .page-head h2{ font-size:42px; margin-bottom:14px; }
   .page-head p{ color:var(--muted); font-size:15px; max-width:520px; }
+
+  .toc{ display:flex; flex-wrap:wrap; gap:8px; padding:26px 0 0; }
+  .toc-pill{
+    display:inline-flex; align-items:center; gap:6px; background:none; cursor:pointer;
+    border:1px solid var(--line); color:var(--muted); font-family:"Inter", sans-serif;
+    font-size:12.5px; padding:7px 13px; border-radius:999px; transition:border-color .2s ease, color .2s ease;
+  }
+  .toc-pill span{ font-family:"Cormorant Garamond", serif; font-style:italic; color:var(--gold); font-size:13px; }
+  .toc-pill:hover{ border-color:var(--line-strong); color:var(--text); }
 
   .content{ padding:54px 0 100px; }
 
@@ -176,6 +208,17 @@
     .tab-btn{ text-align:left; padding:12px 14px; }
     .tab-btn::after{ display:none; }
     .menu-toggle{ display:block; }
+    .tab-group{ display:block; }
+    .group-trigger{
+      width:100%; pointer-events:none; opacity:0.6; font-size:11.5px; text-transform:uppercase;
+      letter-spacing:0.1em; padding:12px 14px 4px;
+    }
+    .group-trigger .caret{ display:none; }
+    .dropdown{
+      display:flex !important; position:static; flex-direction:column; border:none; background:none;
+      padding:0; margin:0 0 4px;
+    }
+    .dropdown-item{ padding:11px 14px 11px 22px; font-size:14px; }
     .hero h1{ font-size:42px; }
     .page-head h2{ font-size:32px; }
   }
@@ -192,13 +235,23 @@
     <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
     <nav class="tabs" id="tabs">
       <button class="tab-btn active" data-tab="accueil">Accueil</button>
-      <button class="tab-btn" data-tab="discord">Discord</button>
-      <button class="tab-btn" data-tab="hrp">HRP</button>
-      <button class="tab-btn" data-tab="interdictions">Interdictions</button>
-      <button class="tab-btn" data-tab="public">Services publics</button>
-      <button class="tab-btn" data-tab="legal">Légal</button>
-      <button class="tab-btn" data-tab="illegal">Illégal</button>
-      <button class="tab-btn" data-tab="notions">Notions RP</button>
+      <div class="tab-group" data-group="general">
+        <button class="tab-btn group-trigger" data-group-trigger="general">Général <span class="caret">▾</span></button>
+        <div class="dropdown" data-dropdown="general">
+          <button class="dropdown-item" data-tab="discord">Discord</button>
+          <button class="dropdown-item" data-tab="hrp">HRP</button>
+          <button class="dropdown-item" data-tab="interdictions">Interdictions</button>
+          <button class="dropdown-item" data-tab="notions">Notions RP</button>
+        </div>
+      </div>
+      <div class="tab-group" data-group="factions">
+        <button class="tab-btn group-trigger" data-group-trigger="factions">Factions <span class="caret">▾</span></button>
+        <div class="dropdown" data-dropdown="factions">
+          <button class="dropdown-item" data-tab="public">Services publics</button>
+          <button class="dropdown-item" data-tab="legal">Légal</button>
+          <button class="dropdown-item" data-tab="illegal">Illégal</button>
+        </div>
+      </div>
     </nav>
   </div>
 </div>
@@ -214,6 +267,7 @@
     </div>
   </div>
   <div class="wrap index-list">
+    <div class="index-group-label">Général</div>
     <div class="index-row" data-tab="discord">
       <span class="num">01</span>
       <span class="title">Discord</span>
@@ -232,28 +286,30 @@
       <span class="desc">Fair-play, coma, bannissements</span>
       <span class="arrow">→</span>
     </div>
-    <div class="index-row" data-tab="public">
+    <div class="index-row" data-tab="notions">
       <span class="num">04</span>
+      <span class="title">Notions RP</span>
+      <span class="desc">Lexique du roleplay</span>
+      <span class="arrow">→</span>
+    </div>
+
+    <div class="index-group-label">Factions</div>
+    <div class="index-row" data-tab="public">
+      <span class="num">01</span>
       <span class="title">Services publics</span>
       <span class="desc">SASP (Police) &amp; SAMC (Secours)</span>
       <span class="arrow">→</span>
     </div>
     <div class="index-row" data-tab="legal">
-      <span class="num">05</span>
+      <span class="num">02</span>
       <span class="title">Légal</span>
       <span class="desc">Entreprises, patrons, annonces</span>
       <span class="arrow">→</span>
     </div>
     <div class="index-row" data-tab="illegal">
-      <span class="num">06</span>
+      <span class="num">03</span>
       <span class="title">Illégal</span>
       <span class="desc">Groupes, braquages, drogues, corruption</span>
-      <span class="arrow">→</span>
-    </div>
-    <div class="index-row" data-tab="notions">
-      <span class="num">07</span>
-      <span class="title">Notions RP</span>
-      <span class="desc">Lexique du roleplay</span>
       <span class="arrow">→</span>
     </div>
   </div>
@@ -266,9 +322,14 @@
     <h2>Règlement Discord</h2>
     <p>Bienvenue sur Sunset FA. Ces règles assurent un espace sûr, respectueux et agréable pour tous les membres.</p>
   </div>
-  <div class="wrap content">
+    <div class="wrap toc">
+        <button class="toc-pill" onclick="jump('discord-b1')"><span>I.</span>Généralités</button>
+        <button class="toc-pill" onclick="jump('discord-b2')"><span>II.</span>Tickets</button>
+  </div>
 
-    <div class="block">
+<div class="wrap content">
+
+    <div class="block" id="discord-b1">
       <div class="block-head"><span class="roman">I.</span><h3>Généralités</h3></div>
       <ul class="list">
         <li><strong>Respect.</strong> Toute forme de harcèlement, d'intimidation ou de discours de haine est strictement interdite.</li>
@@ -286,7 +347,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="discord-b2">
       <div class="block-head"><span class="roman">II.</span><h3>Tickets</h3></div>
       <p class="lead">Lorsque vous ouvrez un ticket auprès du staff, certaines conditions sont à respecter :</p>
       <ul class="list">
@@ -310,9 +371,16 @@
     <h2>Règlement HRP</h2>
     <p>Ces règles hors roleplay encadrent le fonctionnement technique et communautaire du serveur.</p>
   </div>
-  <div class="wrap content">
+    <div class="wrap toc">
+        <button class="toc-pill" onclick="jump('hrp-b1')"><span>I.</span>Graphismes &amp; modifications</button>
+        <button class="toc-pill" onclick="jump('hrp-b2')"><span>II.</span>Remboursements</button>
+        <button class="toc-pill" onclick="jump('hrp-b3')"><span>III.</span>Streameurs</button>
+        <button class="toc-pill" onclick="jump('hrp-b4')"><span>IV.</span>Wipe de personnage</button>
+  </div>
 
-    <div class="block">
+<div class="wrap content">
+
+    <div class="block" id="hrp-b1">
       <div class="block-head"><span class="roman">I.</span><h3>Graphismes &amp; modifications</h3></div>
       <p class="lead">Les modifications de jeu suivantes sont interdites, sans exception :</p>
       <ul class="list">
@@ -330,7 +398,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="hrp-b2">
       <div class="block-head"><span class="roman">II.</span><h3>Remboursements</h3></div>
       <p class="lead">Aucun remboursement n'est effectué dans les cas suivants :</p>
       <ul class="list">
@@ -348,7 +416,7 @@
     </div>
 
     <div class="split">
-      <div class="block">
+      <div class="block" id="hrp-b3">
         <div class="block-head"><span class="roman">III.</span><h3>Streameurs</h3></div>
         <p class="lead">Le stream est autorisé sous déclaration via ticket discord, sous réserve de ces interdictions :</p>
         <ul class="list">
@@ -358,7 +426,7 @@
           <li>Dénigrer le serveur et/ou ses membres</li>
         </ul>
       </div>
-      <div class="block">
+      <div class="block" id="hrp-b4">
         <div class="block-head"><span class="roman">IV.</span><h3>Wipe de personnage</h3></div>
         <p class="lead"><strong>Wipe —</strong> effacement complet du personnage ; une nouvelle histoire doit être créée.<br><strong>Mort RP —</strong> peut entraîner un wipe, validée selon plusieurs critères (dossier de mort RP, peur en scène, abus de tirs, exclusion d'organisation).</p>
         <ul class="list">
@@ -381,9 +449,15 @@
     <h2>Interdictions</h2>
     <p>Afin de garantir une expérience de jeu agréable pour tous, voici la liste des interdictions strictes du serveur.</p>
   </div>
-  <div class="wrap content">
+    <div class="wrap toc">
+        <button class="toc-pill" onclick="jump('interdictions-b1')"><span>I.</span>Généralités</button>
+        <button class="toc-pill" onclick="jump('interdictions-b2')"><span>II.</span>Coma &amp; déconnexions</button>
+        <button class="toc-pill" onclick="jump('interdictions-b3')"><span>III.</span>Bannissements</button>
+  </div>
 
-    <div class="block">
+<div class="wrap content">
+
+    <div class="block" id="interdictions-b1">
       <div class="block-head"><span class="roman">I.</span><h3>Généralités</h3></div>
       <ul class="list">
         <li>Propos racistes, xénophobes, homophobes ou tout discours haineux.</li>
@@ -406,7 +480,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="interdictions-b2">
       <div class="block-head"><span class="roman">II.</span><h3>Coma &amp; déconnexions</h3></div>
       <ul class="list">
         <li>Le trashtalk face à un joueur en coma est strictement interdit.</li>
@@ -421,7 +495,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="interdictions-b3">
       <div class="block-head"><span class="roman">III.</span><h3>Bannissements</h3></div>
       <p class="lead">Le staff de Sunset FA se réserve pleinement le droit de refuser ou de retirer l'accès au serveur à tout utilisateur présentant un historique problématique. Cela inclut, sans s'y limiter :</p>
       <ul class="list">
@@ -455,11 +529,27 @@
     <h2>Services publics</h2>
     <p>Le fonctionnement des deux grandes factions du serveur : le SASP (Police) et la SAMC (secours médicaux).</p>
   </div>
-  <div class="wrap content">
+    <div class="wrap toc">
+        <button class="toc-pill" onclick="jump('public-b1')"><span>I.</span>Présentation &amp; intégration</button>
+        <button class="toc-pill" onclick="jump('public-b2')"><span>II.</span>Cohérence &amp; responsabilité RP</button>
+        <button class="toc-pill" onclick="jump('public-b3')"><span>III.</span>Action &amp; conséquences RP</button>
+        <button class="toc-pill" onclick="jump('public-b4')"><span>IV.</span>Interdictions générales</button>
+        <button class="toc-pill" onclick="jump('public-b5')"><span>V.</span>Fear RP &amp; fair-play</button>
+        <button class="toc-pill" onclick="jump('public-b6')"><span>VI.</span>Comportement, vie civile &amp; relations avec l'illégal</button>
+        <button class="toc-pill" onclick="jump('public-b7')"><span>VII.</span>Refus &amp; diversité des scènes</button>
+        <button class="toc-pill" onclick="jump('public-b8')"><span>VIII.</span>Projet Ripou</button>
+        <button class="toc-pill" onclick="jump('public-b9')"><span>IX.</span>Divisions &amp; prison</button>
+        <button class="toc-pill" onclick="jump('public-b10')"><span>X.</span>Présentation &amp; nous rejoindre</button>
+        <button class="toc-pill" onclick="jump('public-b11')"><span>XI.</span>Règlement HRP EMS</button>
+        <button class="toc-pill" onclick="jump('public-b12')"><span>XII.</span>EMS illégaux</button>
+        <button class="toc-pill" onclick="jump('public-b13')"><span>XIII.</span>Règlement interne &amp; MortRP</button>
+  </div>
+
+<div class="wrap content">
 
     <div class="divider-label" style="margin:0 0 30px;">SASP — Police</div>
 
-    <div class="block">
+    <div class="block" id="public-b1">
       <div class="block-head"><span class="roman">I.</span><h3>Présentation &amp; intégration</h3></div>
       <p class="lead">La faction Police a pour objectif de proposer une expérience de roleplay basée sur la cohérence, l'immersion et la création de scènes entre joueurs. Intégrer la Police représente l'incarnation d'un personnage complet, avec une histoire, des objectifs, des relations, une vie en dehors de son service et une évolution propre. L'objectif principal est de favoriser des scènes équilibrées, immersives et crédibles pour l'ensemble des participants — toute personne intégrant le SASP accepte donc de respecter ce règlement.</p>
       <ul class="list">
@@ -472,7 +562,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="public-b2">
       <div class="block-head"><span class="roman">II.</span><h3>Cohérence &amp; responsabilité RP</h3></div>
       <ul class="list">
         <li>Le SASP fonctionne selon son propre cadre et son propre lore ; chaque joueur doit agir en cohérence avec le rôle qu'il incarne.</li>
@@ -483,7 +573,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="public-b3">
       <div class="block-head"><span class="roman">III.</span><h3>Action &amp; conséquences RP</h3></div>
       <p class="lead">Le roleplay repose sur l'évolution des personnages et les conséquences de leurs actions. L'intégration à la Police ne constitue pas un droit permanent : la présence d'un personnage au sein du SASP dépend de sa cohérence, de son investissement et de son comportement.</p>
       <ul class="list">
@@ -493,7 +583,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="public-b4">
       <div class="block-head"><span class="roman">IV.</span><h3>Interdictions générales</h3></div>
       <ul class="list">
         <li>L'infiltration d'un second personnage actif est interdite pendant l'intégration au SASP ; tout personnage secondaire doit être verrouillé avant le début de l'école de police.</li>
@@ -506,7 +596,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="public-b5">
       <div class="block-head"><span class="roman">V.</span><h3>Fear RP &amp; fair-play</h3></div>
       <ul class="list">
         <li>Un membre du SASP reste un personnage humain : le Fear RP est obligatoire lors de situations dangereuses (prises d'otages, interventions, confrontations...) — un agent ne possède aucune invincibilité liée à sa fonction.</li>
@@ -515,7 +605,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="public-b6">
       <div class="block-head"><span class="roman">VI.</span><h3>Comportement, vie civile &amp; relations avec l'illégal</h3></div>
       <ul class="list">
         <li>Un personnage peut naturellement avoir une opinion négative de la Police selon son histoire — mais les haines répétées ou provocations visant uniquement à dégrader les scènes ne sont pas acceptées. Le manque de respect envers les joueurs derrière les personnages n'est jamais toléré.</li>
@@ -525,7 +615,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="public-b7">
       <div class="block-head"><span class="roman">VII.</span><h3>Refus &amp; diversité des scènes</h3></div>
       <ul class="list">
         <li>Les prises d'otages, braquages, embuscades ou situations dangereuses font partie intégrante du rôle de policier — un agent doit rester capable d'y faire face, sans chercher à supprimer toute possibilité de conséquence.</li>
@@ -534,7 +624,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="public-b8">
       <div class="block-head"><span class="roman">VIII.</span><h3>Projet Ripou</h3></div>
       <p class="lead">Le projet Ripou permet de développer un personnage évoluant volontairement en contradiction avec les valeurs du SASP. Ce type de RP doit rester encadré, transparent envers le staff et validé, afin de préserver la crédibilité du personnage et d'éviter tout abus.</p>
       <ul class="list">
@@ -544,7 +634,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="public-b9">
       <div class="block-head"><span class="roman">IX.</span><h3>Divisions &amp; prison</h3></div>
       <p class="lead"><strong>Divisions</strong> — elles enrichissent le roleplay en créant de nouvelles scènes, enquêtes et interactions, sans constituer un moyen d'obtenir plus de pouvoir ou d'avantages. Chaque membre conserve la mentalité globale du SASP : privilégier la création de roleplay plutôt que la recherche d'arrestations. Le SASP ne dispose volontairement d'aucune division exclusivement dédiée aux interventions, afin que chaque agent participe à des situations variées.</p>
       <p class="lead"><strong>Prison</strong> — environnement IC dont la sécurité est sous la responsabilité du SASP, avec des rondes régulières permettant aux détenus de vivre des scènes avec les surveillants. Chaque détenu reste considéré comme un criminel dans un établissement strict : le respect du cadre carcéral est essentiel. Les rencontres IC entre groupes rivaux en prison peuvent avoir lieu (violences, blessures, rendus IC) dans un cadre cohérent et validé par le roleplay ; des scénarios exceptionnels comme une évasion peuvent également être adaptés.</p>
@@ -552,13 +642,13 @@
 
     <div class="divider-label" style="margin:56px 0 30px;">SAMC — Secours médicaux</div>
 
-    <div class="block">
+    <div class="block" id="public-b10">
       <div class="block-head"><span class="roman">X.</span><h3>Présentation &amp; nous rejoindre</h3></div>
       <p class="lead">La San Andreas Medical Company (SAMC) est née le 11 février 2024 de la fusion du Las Santos Medical Center (LSMC) et du Blaine County Medical Center (BCMC). Dirigée par trois personnes éminentes du domaine médical, elle est un pilier de la santé à San Andreas, composée de plusieurs centres (Pillbox Hill, Paleto, Sandy Shores, Raxwood, Caya) et d'un service d'unités spécialisées (Search and Rescue : montagne, mer, air). Elle propose aussi des services de chirurgie, psychologie, obstétrique, laboratoire et mortuaire.</p>
       <p class="lead">Pour rejoindre la SAMC, il faut rejoindre le Discord de la faction et candidater via la rubrique Annonces-Publiques. L'engagement doit être sûr et réfléchi : l'hôpital n'est pas fait pour les girouettes, et un départ précipité entraîne un blacklist des services publics. Une fois accepté, une formation d'une soirée permet l'intégration au service.</p>
     </div>
 
-    <div class="block">
+    <div class="block" id="public-b11">
       <div class="block-head"><span class="roman">XI.</span><h3>Règlement HRP EMS</h3></div>
       <ul class="list">
         <li>Un EMS est un médecin habilité à soigner petites et grosses blessures, avec plusieurs fonctionnalités et pôles spécifiques.</li>
@@ -576,7 +666,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="public-b12">
       <div class="block-head"><span class="roman">XII.</span><h3>EMS illégaux</h3></div>
       <p class="lead">Il est possible de cumuler le rôle d'EMS avec des activités considérées comme illégales, mais uniquement après examen de dossier et sous la gestion exclusive du Staff — toute pratique illégale non validée entraîne un bannissement permanent. Sont notamment concernés : tournois de boxe clandestins, bagarres sauvages, ou soins dans des hôpitaux clandestins.</p>
       <ul class="list">
@@ -590,7 +680,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="public-b13">
       <div class="block-head"><span class="roman">XIII.</span><h3>Règlement interne &amp; MortRP</h3></div>
       <p class="lead">La SAMC dispose d'un règlement intérieur auquel tout médecin adhère automatiquement en rejoignant le service — non-respect passible de licenciement immédiat ou de sanctions RP (consultable via le site web ou le manuel).</p>
       <p class="lead">Les MortRP sont attribués de manière discrétionnaire, après évaluation individuelle. Seuls les médecins ayant reçu une autorisation préalable peuvent initier un MortRP de leur propre initiative.</p>
@@ -610,9 +700,26 @@
     <h2>Légal</h2>
     <p>Les règles applicables aux entreprises, au Gouvernement, au DOJ et aux agences immobilières officielles du serveur.</p>
   </div>
-  <div class="wrap content">
+    <div class="wrap toc">
+        <button class="toc-pill" onclick="jump('legal-b1')"><span>I.</span>Règlement patron</button>
+        <button class="toc-pill" onclick="jump('legal-b2')"><span>II.</span>Discord à des fins RP</button>
+        <button class="toc-pill" onclick="jump('legal-b3')"><span>III.</span>Copinage</button>
+        <button class="toc-pill" onclick="jump('legal-b4')"><span>IV.</span>Annonces</button>
+        <button class="toc-pill" onclick="jump('legal-b5')"><span>V.</span>Règlement général</button>
+        <button class="toc-pill" onclick="jump('legal-b6')"><span>VI.</span>Introduction — Gouvernement &amp; DOJ</button>
+        <button class="toc-pill" onclick="jump('legal-b7')"><span>VII.</span>Généralités — Gouvernement &amp; DOJ</button>
+        <button class="toc-pill" onclick="jump('legal-b8')"><span>VIII.</span>Règlement DOJ</button>
+        <button class="toc-pill" onclick="jump('legal-b9')"><span>IX.</span>Règlement Gouvernement</button>
+        <button class="toc-pill" onclick="jump('legal-b10')"><span>X.</span>Règlement interne &amp; application des peines</button>
+        <button class="toc-pill" onclick="jump('legal-b11')"><span>XI.</span>Joueurs &amp; propriétés</button>
+        <button class="toc-pill" onclick="jump('legal-b12')"><span>XII.</span>Placement des propriétés</button>
+        <button class="toc-pill" onclick="jump('legal-b13')"><span>XIII.</span>Motel, caravane &amp; garage</button>
+        <button class="toc-pill" onclick="jump('legal-b14')"><span>XIV.</span>Il est interdit</button>
+  </div>
 
-    <div class="block">
+<div class="wrap content">
+
+    <div class="block" id="legal-b1">
       <div class="block-head"><span class="roman">I.</span><h3>Règlement patron</h3></div>
       <ul class="list">
         <li>Vous ne pouvez pas occuper un poste de direction (patron et co-patron) dans deux entreprises en même temps.</li>
@@ -626,7 +733,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="legal-b2">
       <div class="block-head"><span class="roman">II.</span><h3>Discord à des fins RP</h3></div>
       <p class="lead">L'utilisation du Discord à des fins RP est interdite, à l'exception des cas suivants :</p>
       <ul class="list">
@@ -639,7 +746,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="legal-b3">
       <div class="block-head"><span class="roman">III.</span><h3>Copinage</h3></div>
       <p class="lead">Le copinage est strictement interdit dans toute entreprise. Pour rappel, il constitue :</p>
       <ul class="list">
@@ -649,7 +756,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="legal-b4">
       <div class="block-head"><span class="roman">IV.</span><h3>Annonces</h3></div>
       <div class="two-col">
         <div>
@@ -669,7 +776,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="legal-b5">
       <div class="block-head"><span class="roman">V.</span><h3>Règlement général</h3></div>
       <ul class="list">
         <li>Les entreprises officielles sont le reflet de l'image du serveur. Les PDG et leurs employés doivent adopter un comportement exemplaire sur leur lieu de travail.</li>
@@ -684,7 +791,7 @@
 
     <div class="divider-label" style="margin:0 0 30px;">Gouvernement &amp; Justice</div>
 
-    <div class="block">
+    <div class="block" id="legal-b6">
       <div class="block-head"><span class="roman">VI.</span><h3>Introduction — Gouvernement &amp; DOJ</h3></div>
       <p class="lead">Le gouvernement, dirigé par le gouverneur, est à la tête de tout l'État de San Andreas, accompagné de son cabinet. Des élections sont organisées pour permettre à tous les joueurs de voter. Toute personne souhaitant devenir gouverneur doit d'abord contacter le staff gérant le gouvernement pour officialiser sa candidature, puis organiser sa campagne dans le jeu (contact des médias, réunions, conventions avec des entreprises, etc.).</p>
       <p class="lead">Le DOJ (la justice) est détaché du bureau du maire : les deux collaborent et travaillent étroitement ensemble, liés par leurs activités, mais aucun département n'est supérieur ou décisionnaire vis-à-vis de l'autre.</p>
@@ -694,7 +801,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="legal-b7">
       <div class="block-head"><span class="roman">VII.</span><h3>Généralités — Gouvernement &amp; DOJ</h3></div>
       <ul class="list">
         <li>Le RP illégal est strictement interdit : il est impossible de postuler ou de déposer un dossier si vous y êtes impliqué.</li>
@@ -709,7 +816,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="legal-b8">
       <div class="block-head"><span class="roman">VIII.</span><h3>Règlement DOJ</h3></div>
       <ul class="list">
         <li>Les informations confidentielles relatives aux affaires en cours doivent être traitées avec le plus grand soin ; aucune divulgation non autorisée n'est permise.</li>
@@ -722,7 +829,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="legal-b9">
       <div class="block-head"><span class="roman">IX.</span><h3>Règlement Gouvernement</h3></div>
       <ul class="list">
         <li>Les informations confidentielles relatives au Gouvernement doivent être traitées avec le plus grand soin ; aucune divulgation non autorisée n'est permise.</li>
@@ -734,7 +841,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="legal-b10">
       <div class="block-head"><span class="roman">X.</span><h3>Règlement interne &amp; application des peines</h3></div>
       <p class="lead">Le Gouvernement et le DOJ disposent d'un règlement intérieur que tout membre accepte automatiquement en rejoignant la faction. Il doit être respecté ; tout manquement peut entraîner un licenciement sur-le-champ ou une sanction RP. Il reste consultable via l'académie Discord.</p>
       <p class="lead">Le Département de la Justice a la haute main sur l'application des peines les plus importantes, pouvant aller jusqu'à la fin d'un personnage (prison à vie) ou quelques jours de prison. Les règles internes établies doivent être respectées, la procédure documentée, et l'équité maintenue envers tous les joueurs.</p>
@@ -746,7 +853,7 @@
 
     <div class="divider-label" style="margin:56px 0 30px;">Immobilier</div>
 
-    <div class="block">
+    <div class="block" id="legal-b11">
       <div class="block-head"><span class="roman">XI.</span><h3>Joueurs &amp; propriétés</h3></div>
       <ul class="list">
         <li>Un bien non loué ou inutilisé pendant 14 jours peut être supprimé par un agent immobilier pour en placer un nouveau ; la règle des 30 jours de non-utilisation reste en vigueur (suppression automatique).</li>
@@ -757,7 +864,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="legal-b12">
       <div class="block-head"><span class="roman">XII.</span><h3>Placement des propriétés</h3></div>
       <ul class="list">
         <li>Il n'est pas autorisé de placer une nouvelle propriété à côté d'une entrée existante, même si cela semble naturellement possible (copropriété, maison mitoyenne, plusieurs portes) — l'accord d'un référent immobilier est requis au préalable.</li>
@@ -765,7 +872,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="legal-b13">
       <div class="block-head"><span class="roman">XIII.</span><h3>Motel, caravane &amp; garage</h3></div>
       <ul class="list">
         <li>L'intérieur « Motel » est réservé aux motels ; l'intérieur « Caravane » est réservé aux caravanes.</li>
@@ -776,7 +883,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="legal-b14">
       <div class="block-head"><span class="roman">XIV.</span><h3>Il est interdit</h3></div>
       <ul class="list">
         <li>Changer de rôle en passant de l'illégal au statut d'agent immobilier, et inversement — sanctionné par un wipe du personnage ainsi qu'une blacklist/bannissement.</li>
@@ -802,9 +909,28 @@
     <h2>Illégal</h2>
     <p>Le fonctionnement des groupes illégaux, des petites frappes aux organisations officielles : discord, prises d'otage, fusillades, drogues, armes, braquages et corruption.</p>
   </div>
-  <div class="wrap content">
+    <div class="wrap toc">
+        <button class="toc-pill" onclick="jump('illegal-b1')"><span>I.</span>Discord illégal</button>
+        <button class="toc-pill" onclick="jump('illegal-b2')"><span>II.</span>Introduction au RP illégal</button>
+        <button class="toc-pill" onclick="jump('illegal-b3')"><span>III.</span>Généralités</button>
+        <button class="toc-pill" onclick="jump('illegal-b4')"><span>IV.</span>Prise d'otage</button>
+        <button class="toc-pill" onclick="jump('illegal-b5')"><span>V.</span>Fusillades</button>
+        <button class="toc-pill" onclick="jump('illegal-b6')"><span>VI.</span>Drive-by</button>
+        <button class="toc-pill" onclick="jump('illegal-b7')"><span>VII.</span>Drogues</button>
+        <button class="toc-pill" onclick="jump('illegal-b8')"><span>VIII.</span>Véhicules</button>
+        <button class="toc-pill" onclick="jump('illegal-b9')"><span>IX.</span>Armes et munitions</button>
+        <button class="toc-pill" onclick="jump('illegal-b10')"><span>X.</span>Braquages</button>
+        <button class="toc-pill" onclick="jump('illegal-b11')"><span>XI.</span>Laboratoires</button>
+        <button class="toc-pill" onclick="jump('illegal-b12')"><span>XII.</span>Business secondaire</button>
+        <button class="toc-pill" onclick="jump('illegal-b13')"><span>XIII.</span>Loot &amp; renforts</button>
+        <button class="toc-pill" onclick="jump('illegal-b14')"><span>XIV.</span>Mort RP &amp; Wipe</button>
+        <button class="toc-pill" onclick="jump('illegal-b15')"><span>XV.</span>Arnaques &amp; vols</button>
+        <button class="toc-pill" onclick="jump('illegal-b16')"><span>XVI.</span>Corruption</button>
+  </div>
 
-    <div class="block">
+<div class="wrap content">
+
+    <div class="block" id="illegal-b1">
       <div class="block-head"><span class="roman">I.</span><h3>Discord illégal</h3></div>
       <p class="lead">Avant de rejoindre le Discord illégal de Sunset FA, voici la liste des règles à respecter impérativement, sous peine de sanctions.</p>
       <ul class="list">
@@ -824,7 +950,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b2">
       <div class="block-head"><span class="roman">II.</span><h3>Introduction au RP illégal</h3></div>
       <p class="lead">Vous démarrez votre histoire en tant que civil. Pour suivre un chemin illégal, créez votre groupe de petites frappes (10 membres maximum) et accomplissez des missions illégales afin d'augmenter votre crédibilité dans les quartiers de Los Santos. Une fois celle-ci suffisante, ouvrez un ticket auprès du staff pour faire valider votre groupe.</p>
       <p class="lead"><strong>Comment augmenter vos chances de validation ?</strong></p>
@@ -838,7 +964,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b3">
       <div class="block-head"><span class="roman">III.</span><h3>Généralités</h3></div>
       <ul class="list">
         <li>Interdiction de retourner dans votre quartier lors d'une course-poursuite avec la police ou un groupe.</li>
@@ -864,7 +990,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b4">
       <div class="block-head"><span class="roman">IV.</span><h3>Prise d'otage</h3></div>
       <ul class="list">
         <li>Prendre en otage un membre des services publics expose votre personnage à une peine de prison, voire une Mort RP. La prise d'otage sur des agents d'État ou membres du gouvernement doit rester un dernier recours ; pour le SASP, tout otage pris hors intervention sera sanctionné — privilégiez toujours l'innovation RP.</li>
@@ -887,7 +1013,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b5">
       <div class="block-head"><span class="roman">V.</span><h3>Fusillades</h3></div>
       <p class="lead">Le fait d'engager une fusillade doit rester l'ultime recours. Soyez créatifs pour proposer de belles scènes et éviter autant que possible l'usage d'armes à feu.</p>
       <ul class="list">
@@ -907,7 +1033,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b6">
       <div class="block-head"><span class="roman">VI.</span><h3>Drive-by</h3></div>
       <ul class="list">
         <li>Le drive-by peut s'effectuer avec un véhicule en déplacement, sans dépasser 50 km/h. Vous devez toujours descendre du véhicule pour braquer un autre joueur — la permission de drive-by n'autorise pas le braquage, à moto, vélo ou en voiture.</li>
@@ -920,7 +1046,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b7">
       <div class="block-head"><span class="roman">VII.</span><h3>Drogues</h3></div>
       <ul class="list">
         <li>Vendre de la drogue en zone safe est interdit.</li>
@@ -940,7 +1066,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b8">
       <div class="block-head"><span class="roman">VIII.</span><h3>Véhicules</h3></div>
       <p class="lead"><strong>Groupes officiels</strong> — vous devez respecter la liste de véhicules imposée par les référents illégaux dans votre dossier de groupe. Elle ne peut être modifiée qu'après validation des référents, via une demande dans le canal dédié.</p>
       <p class="lead"><strong>Petites Frappes</strong> — aucune liste n'est imposée, mais tout changement doit être notifié sur le Discord illégal et rester cohérent avec l'image de votre groupe. Les super-sportives sont interdites pour toute activité illégale.</p>
@@ -955,7 +1081,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b9">
       <div class="block-head"><span class="roman">IX.</span><h3>Armes et munitions</h3></div>
       <p class="lead">Les civils doté du PPA et petites frappes ont accès uniquement au pistolet et au revolver.</p>
       <p class="lead" style="margin-bottom:8px;">Munitions maximum autorisées sur soi + chargeur + boîte de munition :</p>
@@ -975,7 +1101,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b10">
       <div class="block-head"><span class="roman">X.</span><h3>Braquages</h3></div>
       <p class="lead"><strong>Fleeca &amp; Bijouterie</strong> — vous devez obligatoirement entamer et assumer une course-poursuite si la police intervient. Attendez son arrivée pendant 15 minutes ; passé ce délai sans patrouille présente, vous pouvez partir.</p>
       <ul class="list">
@@ -997,7 +1123,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b11">
       <div class="block-head"><span class="roman">XI.</span><h3>Laboratoires</h3></div>
       <p class="lead"><strong>Laboratoire de drogues</strong> — pour attaquer un laboratoire, le groupe doit fournir au staff un dossier de preuves comprenant la position du laboratoire, l'interception de deux véhicules (l'un chargé de matière brute, l'autre de production finie) et une photo devant l'entrée.</p>
       <ul class="list">
@@ -1015,7 +1141,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b12">
       <div class="block-head"><span class="roman">XII.</span><h3>Business secondaire</h3></div>
       <p class="lead">Pour attaquer un business secondaire, le groupe doit fournir au staff un dossier de preuves comprenant la position du business, l'interception d'un véhicule chargé de marchandise, et une photo devant l'entrée. Toutes ces informations doivent être obtenues de façon totalement RP — toute irrégularité constatée sera sanctionnée.</p>
       <div class="note">
@@ -1024,7 +1150,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b13">
       <div class="block-head"><span class="roman">XIII.</span><h3>Loot &amp; renforts</h3></div>
       <ul class="list">
         <li>Looter les armes ou munitions présentes sur un joueur, un véhicule ou une instance sans scène préalable est interdit.</li>
@@ -1039,7 +1165,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b14">
       <div class="block-head"><span class="roman">XIV.</span><h3>Mort RP &amp; Wipe</h3></div>
       <p class="lead">Avant de rentrer dans un projet illégal, vous devrez absolument passer par un wipe de votre personnage.</p>
       <ul class="list">
@@ -1056,7 +1182,7 @@
       </div>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b15">
       <div class="block-head"><span class="roman">XV.</span><h3>Arnaques &amp; vols</h3></div>
       <ul class="list">
         <li>Les arnaques sont formellement interdites : fausses ventes d'armes, faux blanchiment d'argent, fausse vente de biens immobiliers, de drogue ou toute autre activité frauduleuse.</li>
@@ -1069,7 +1195,7 @@
       </ul>
     </div>
 
-    <div class="block">
+    <div class="block" id="illegal-b16">
       <div class="block-head"><span class="roman">XVI.</span><h3>Corruption</h3></div>
       <p class="lead">Un membre du Gouvernement peut être corrompu à la suite d'un dossier déposé et validé par le staff.</p>
       <div class="two-col">
@@ -1196,23 +1322,62 @@
 <script>
   var buttons = document.querySelectorAll('[data-tab]');
   var panels = document.querySelectorAll('.panel');
-  var tabBtns = document.querySelectorAll('.tab-btn');
+  var tabBtns = document.querySelectorAll('.tab-btn:not(.group-trigger)');
+  var dropdownItems = document.querySelectorAll('.dropdown-item');
+  var groupTriggers = document.querySelectorAll('.group-trigger');
+  var tabGroups = document.querySelectorAll('.tab-group');
   var tabsNav = document.getElementById('tabs');
+
+  var groupOf = {
+    discord: 'general', hrp: 'general', interdictions: 'general', notions: 'general',
+    public: 'factions', legal: 'factions', illegal: 'factions'
+  };
+
+  function closeGroups(){
+    tabGroups.forEach(function(g){ g.classList.remove('open'); });
+  }
 
   function goTo(name){
     panels.forEach(function(p){ p.classList.toggle('active', p.getAttribute('data-panel') === name); });
     tabBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-tab') === name); });
+    dropdownItems.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-tab') === name); });
+    var activeGroup = groupOf[name];
+    groupTriggers.forEach(function(g){
+      g.classList.toggle('active-group', g.getAttribute('data-group-trigger') === activeGroup);
+    });
     tabsNav.classList.remove('open');
+    closeGroups();
     window.scrollTo({top:0, behavior:'instant'});
   }
 
   buttons.forEach(function(el){
-    el.addEventListener('click', function(){ goTo(el.getAttribute('data-tab')); });
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      goTo(el.getAttribute('data-tab'));
+    });
   });
 
-  document.getElementById('menuToggle').addEventListener('click', function(){
+  groupTriggers.forEach(function(trigger){
+    trigger.addEventListener('click', function(e){
+      e.stopPropagation();
+      var group = trigger.closest('.tab-group');
+      var wasOpen = group.classList.contains('open');
+      closeGroups();
+      if (!wasOpen) group.classList.add('open');
+    });
+  });
+
+  document.addEventListener('click', function(){ closeGroups(); });
+
+  document.getElementById('menuToggle').addEventListener('click', function(e){
+    e.stopPropagation();
     tabsNav.classList.toggle('open');
   });
+
+  function jump(id){
+    var el = document.getElementById(id);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }
 </script>
 
 </body>
